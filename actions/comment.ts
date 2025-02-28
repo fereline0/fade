@@ -17,7 +17,7 @@ export const createComment = createServerAction()
         userId: input.userId as string,
         published: input.published,
         writerId: input.writerId as string,
-        parentId: input.parentId as string,
+        parentId: (input.parentId as string) ?? null,
       },
     });
   });
@@ -33,7 +33,7 @@ export const updateComment = createServerAction()
         value: input.value as string,
         userId: input.userId as string,
         published: input.published,
-        parentId: input.parentId as string,
+        parentId: (input.parentId as string) ?? null,
       },
     });
   });

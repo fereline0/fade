@@ -75,7 +75,7 @@ export default function Header() {
           </NavbarItem>
           {status === "loading" ? (
             <Spinner />
-          ) : session?.user ? (
+          ) : status === "authenticated" ? (
             <Dropdown backdrop="blur">
               <DropdownTrigger>
                 <Avatar
@@ -83,7 +83,7 @@ export default function Header() {
                   size="sm"
                   isBordered
                   color="default"
-                  name={session.user?.name ?? undefined}
+                  name={session.user.name ?? undefined}
                   src={session.user.image ?? undefined}
                 />
               </DropdownTrigger>

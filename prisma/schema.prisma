@@ -8,16 +8,53 @@ generator client {
 }
 
 model User {
-  id             String          @id @default(cuid())
+  id             String    @id @default(cuid())
   name           String?
-  email          String          @unique
+  email          String    @unique
   emailVerified  DateTime?
   image          String?
+  roleId         String?
+  role           Role?     @relation(fields: [roleId], references: [id])
   accounts       Account[]
   sessions       Session[]
-  Authenticator  Authenticator[]
-  comments       Comment[]       @relation("user")
-  writedComments Comment[]       @relation("writer")
+  comments       Comment[] @relation("user")
+  writedComments Comment[] @relation("writer")
+  bans           Ban[]     @relation("user")
+  bansInitiator  Ban[]     @relation("initiator")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Role {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  position  Int       @unique
+  users     User[]
+  abilities Ability[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Ability {
+  id    String @id @default(cuid())
+  slug  String @unique
+  roles Role[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Ban {
+  id          String   @id @default(cuid())
+  user        User     @relation("user", fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  reason      String
+  activity    Boolean  @default(true)
+  expires     DateTime
+  initiator   User     @relation("initiator", fields: [initiatorId], references: [id], onDelete: Cascade)
+  initiatorId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -76,20 +113,4 @@ model VerificationToken {
   expires    DateTime
 
   @@id([identifier, token])
-}
-
-// Optional for WebAuthn support
-model Authenticator {
-  credentialID         String  @unique
-  userId               String
-  providerAccountId    String
-  credentialPublicKey  String
-  counter              Int
-  credentialDeviceType String
-  credentialBackedUp   Boolean
-  transports           String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@id([userId, credentialID])
 }

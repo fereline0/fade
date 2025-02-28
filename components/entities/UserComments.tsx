@@ -12,6 +12,7 @@ import { createComment, updateComment } from "@/actions/comment";
 import { useRouter } from "next/navigation";
 import CommentPreview from "../shared/CommentPreview";
 import { MdModeEditOutline, MdOutlineReply } from "react-icons/md";
+import Loading from "../widgets/Loading";
 
 type TUserCommentsProps = {
   user: TUser;
@@ -79,40 +80,44 @@ export default function UserComments({ user }: TUserCommentsProps) {
 
   return (
     <div className="space-y-2">
-      {status === "authenticated" && (
-        <Card>
-          <CardBody>
-            <div className="space-y-4">
-              {commentForEdit && commentForEdit.writer?.name && (
-                <CommentPreview
-                  name={commentForEdit.writer.name}
-                  value={commentForEdit.value}
-                  startContent={<MdModeEditOutline size={22} />}
-                  onPress={clearCommentForEdit}
+      {status === "loading" ? (
+        <Loading />
+      ) : (
+        status === "authenticated" && (
+          <Card>
+            <CardBody>
+              <div className="space-y-4">
+                {commentForEdit && commentForEdit.writer?.name && (
+                  <CommentPreview
+                    name={commentForEdit.writer.name}
+                    value={commentForEdit.value}
+                    startContent={<MdModeEditOutline size={22} />}
+                    onPress={clearCommentForEdit}
+                  />
+                )}
+                {commentParent && commentParent.writer?.name && (
+                  <CommentPreview
+                    name={commentParent.writer.name}
+                    value={commentParent.value}
+                    startContent={<MdOutlineReply size={22} />}
+                    onPress={clearCommentParent}
+                  />
+                )}
+                <CommentForm
+                  onPublish={onPublish}
+                  value={value}
+                  setValue={setValue}
+                  isLoading={isCreatePending || isUpdatePending}
+                  valueErrorMessage={
+                    commentForEdit
+                      ? updateError?.fieldErrors?.value
+                      : createError?.fieldErrors?.value
+                  }
                 />
-              )}
-              {commentParent && commentParent.writer?.name && (
-                <CommentPreview
-                  name={commentParent.writer.name}
-                  value={commentParent.value}
-                  startContent={<MdOutlineReply size={22} />}
-                  onPress={clearCommentParent}
-                />
-              )}
-              <CommentForm
-                onPublish={onPublish}
-                value={value}
-                setValue={setValue}
-                isLoading={isCreatePending || isUpdatePending}
-                valueErrorMessage={
-                  commentForEdit
-                    ? updateError?.fieldErrors?.value
-                    : createError?.fieldErrors?.value
-                }
-              />
-            </div>
-          </CardBody>
-        </Card>
+              </div>
+            </CardBody>
+          </Card>
+        )
       )}
       {user.comments?.map((comment) => (
         <UserComment

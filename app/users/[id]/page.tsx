@@ -16,6 +16,7 @@ export default async function UserPage({
       id,
     },
     include: {
+      role: true,
       comments: {
         where: {
           published: true,

@@ -14,11 +14,9 @@ export default function User({ user }: TUserProps) {
     <div className="space-y-4">
       <Card>
         <CardBody>
-          <div className="flex gap-4">
+          <div className="flex flex-col items-center md:items-start md:flex-row gap-4">
             <Image isBlurred src={user.image ?? undefined} width={220} />
-            <div>
-              <h2 className="font-bold text-2xl">{user.name}</h2>
-            </div>
+            <h2 className="font-bold text-2xl">{user.name}</h2>
           </div>
         </CardBody>
       </Card>

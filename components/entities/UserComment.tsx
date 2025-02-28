@@ -16,6 +16,7 @@ import {
   useDisclosure,
 } from "@heroui/modal";
 import { Button } from "@heroui/button";
+import { useSession } from "next-auth/react";
 
 type TUserCommentProps = {
   comment: TComment;
@@ -30,14 +31,9 @@ export default function UserComment({
   setCommentForEdit,
   setCommentParent,
 }: TUserCommentProps) {
+  const { data: session } = useSession();
   const router = useRouter();
-
-  const {
-    isOpen: isOpenSignOut,
-    onOpen: onOpenSignOut,
-    onOpenChange: onOpenChangeSignOut,
-  } = useDisclosure();
-
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { isPending, execute } = useServerAction(deleteComment);
 
   const onReply = () => {
@@ -45,18 +41,31 @@ export default function UserComment({
   };
 
   const onEdit = () => {
-    comment.parent ? setCommentParent(comment.parent) : null;
+    if (comment.parent) {
+      setCommentParent(comment.parent);
+    }
     setCommentForEdit(comment);
     setValue(comment.value);
   };
 
   const onDelete = async () => {
-    await execute({
-      id: comment.id,
-    });
-
+    await execute({ id: comment.id });
     router.refresh();
   };
+
+  const canReply = session?.user;
+
+  const canEdit =
+    session?.user.id === comment.writerId ||
+    session?.user.role?.abilities?.some(
+      (ability) => ability.slug === "editComment",
+    );
+
+  const canDelete =
+    session?.user.id === comment.writerId ||
+    session?.user.role?.abilities?.some(
+      (ability) => ability.slug === "deleteComment",
+    );
 
   if (!comment.writer) {
     return null;
@@ -81,22 +90,20 @@ export default function UserComment({
           </Link>
         }
         userEndContent={
-          <CommentActions
-            replyCommand={{ onPress: onReply, isDisabled: false }}
-            editCommand={{ onPress: onEdit, isDisabled: false }}
-            deleteCommand={{ onPress: onOpenSignOut, isDisabled: false }}
-          />
+          (canReply || canEdit || canDelete) && (
+            <CommentActions
+              replyCommand={{ onPress: onReply, isDisabled: !canReply }}
+              editCommand={{ onPress: onEdit, isDisabled: !canEdit }}
+              deleteCommand={{ onPress: onOpen, isDisabled: !canDelete }}
+            />
+          )
         }
         description={formatDistance(comment.createdAt, new Date(), {
           addSuffix: true,
         })}
         value={comment.value}
       />
-      <Modal
-        backdrop="blur"
-        isOpen={isOpenSignOut}
-        onOpenChange={onOpenChangeSignOut}
-      >
+      <Modal backdrop="blur" isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           <ModalHeader className="flex flex-col gap-1">
             Are you sure you want to delete this comment?
