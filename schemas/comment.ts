@@ -8,6 +8,10 @@ const createCommentSchema = z.object({
   parentId: z.string().optional(),
 });
 
+const canUpdateCommentProcedureSchema = z.object({
+  writerId: z.string(),
+});
+
 const updateCommentSchema = z.object({
   id: z.string(),
   value: z.string().min(1).max(1024).optional(),
@@ -17,8 +21,18 @@ const updateCommentSchema = z.object({
   parentId: z.string().optional(),
 });
 
+const canDeleteCommentProcedureSchema = z.object({
+  writerId: z.string(),
+});
+
 const deleteCommentSchema = z.object({
   id: z.string(),
 });
 
-export { createCommentSchema, updateCommentSchema, deleteCommentSchema };
+export {
+  createCommentSchema,
+  canUpdateCommentProcedureSchema,
+  updateCommentSchema,
+  canDeleteCommentProcedureSchema,
+  deleteCommentSchema,
+};

@@ -2,14 +2,14 @@ import { Textarea } from "@heroui/input";
 import { Form } from "@heroui/form";
 import { Button } from "@heroui/button";
 import { PressEvent, ValidationResult } from "@react-types/shared";
-import { ReactNode } from "react";
+import { Dispatch, ReactNode, SetStateAction } from "react";
 import { MdSend } from "react-icons/md";
 
 type TCommentFormProps = {
   onPublish: (e: PressEvent) => void;
   isLoading: boolean;
   value: string;
-  setValue: React.Dispatch<React.SetStateAction<string>>;
+  setValue: Dispatch<SetStateAction<string>>;
   valueErrorMessage?: ReactNode | ((v: ValidationResult) => ReactNode);
 };
 

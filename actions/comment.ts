@@ -7,6 +7,10 @@ import {
   deleteCommentSchema,
   updateCommentSchema,
 } from "@/schemas/comment";
+import {
+  canDeleteCommentProcedure,
+  canUpdateCommentProcedure,
+} from "@/procedures/comment";
 
 export const createComment = createServerAction()
   .input(createCommentSchema)
@@ -22,7 +26,8 @@ export const createComment = createServerAction()
     });
   });
 
-export const updateComment = createServerAction()
+export const updateComment = canUpdateCommentProcedure
+  .createServerAction()
   .input(updateCommentSchema)
   .handler(async ({ input }) => {
     await prisma.comment.update({
@@ -38,7 +43,8 @@ export const updateComment = createServerAction()
     });
   });
 
-export const deleteComment = createServerAction()
+export const deleteComment = canDeleteCommentProcedure
+  .createServerAction()
   .input(deleteCommentSchema)
   .handler(async ({ input }) => {
     await prisma.comment.delete({

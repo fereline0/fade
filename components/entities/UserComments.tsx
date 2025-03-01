@@ -56,6 +56,7 @@ export default function UserComments({ user }: TUserCommentsProps) {
         value: value,
         published: true,
         parentId: commentParent?.id,
+        writerId: commentForEdit.writerId,
       });
     } else {
       await executeCreate({

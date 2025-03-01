@@ -17,12 +17,14 @@ import {
 } from "@heroui/modal";
 import { Button } from "@heroui/button";
 import { useSession } from "next-auth/react";
+import { canDelete, canEdit } from "@/policies/comment";
+import { Dispatch, SetStateAction } from "react";
 
 type TUserCommentProps = {
   comment: TComment;
-  setValue: React.Dispatch<React.SetStateAction<string>>;
-  setCommentForEdit: React.Dispatch<React.SetStateAction<TComment | null>>;
-  setCommentParent: React.Dispatch<React.SetStateAction<TComment | null>>;
+  setValue: Dispatch<SetStateAction<string>>;
+  setCommentForEdit: Dispatch<SetStateAction<TComment | null>>;
+  setCommentParent: Dispatch<SetStateAction<TComment | null>>;
 };
 
 export default function UserComment({
@@ -31,7 +33,7 @@ export default function UserComment({
   setCommentForEdit,
   setCommentParent,
 }: TUserCommentProps) {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { isPending, execute } = useServerAction(deleteComment);
@@ -49,23 +51,22 @@ export default function UserComment({
   };
 
   const onDelete = async () => {
-    await execute({ id: comment.id });
+    await execute({ id: comment.id, writerId: comment.writerId });
     router.refresh();
   };
 
-  const canReply = session?.user;
+  const isUserLoggedIn = status === "authenticated";
+  const userId = session?.user?.id || "";
+  const userAbilities = session?.user?.role?.abilities || [];
 
-  const canEdit =
-    session?.user.id === comment.writerId ||
-    session?.user.role?.abilities?.some(
-      (ability) => ability.slug === "editComment",
-    );
+  const replyIsDisabled = !isUserLoggedIn;
+  const editIsDisabled =
+    !isUserLoggedIn || !canEdit(userId, comment.writerId, userAbilities);
+  const deleteIsDisabled =
+    !isUserLoggedIn || !canDelete(userId, comment.writerId, userAbilities);
 
-  const canDelete =
-    session?.user.id === comment.writerId ||
-    session?.user.role?.abilities?.some(
-      (ability) => ability.slug === "deleteComment",
-    );
+  const isAnyActionDisabled =
+    replyIsDisabled && editIsDisabled && deleteIsDisabled;
 
   if (!comment.writer) {
     return null;
@@ -90,11 +91,11 @@ export default function UserComment({
           </Link>
         }
         userEndContent={
-          (canReply || canEdit || canDelete) && (
+          !isAnyActionDisabled && (
             <CommentActions
-              replyCommand={{ onPress: onReply, isDisabled: !canReply }}
-              editCommand={{ onPress: onEdit, isDisabled: !canEdit }}
-              deleteCommand={{ onPress: onOpen, isDisabled: !canDelete }}
+              replyCommand={{ onPress: onReply, isDisabled: replyIsDisabled }}
+              editCommand={{ onPress: onEdit, isDisabled: editIsDisabled }}
+              deleteCommand={{ onPress: onOpen, isDisabled: deleteIsDisabled }}
             />
           )
         }
