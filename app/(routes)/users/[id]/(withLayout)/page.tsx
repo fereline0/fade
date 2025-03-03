@@ -17,6 +17,11 @@ export default async function UserPage({
     },
     include: {
       writer: true,
+      parent: {
+        include: {
+          writer: true,
+        },
+      },
     },
   });
 
