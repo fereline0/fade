@@ -2,23 +2,23 @@
 
 import { useSession } from "next-auth/react";
 import { Card, CardBody } from "@heroui/card";
-import CommentForm from "../shared/CommentForm";
 import UserComment from "./UserComment";
-import { TUser } from "@/types/user";
 import { useEffect, useState } from "react";
-import { TComment } from "@/types/comment";
 import { useServerAction } from "zsa-react";
-import { createComment, updateComment } from "@/actions/comment";
 import { useRouter } from "next/navigation";
-import CommentPreview from "../shared/CommentPreview";
 import { MdModeEditOutline, MdOutlineReply } from "react-icons/md";
-import Loading from "../widgets/Loading";
+import { TComment } from "@/app/_types/comment";
+import { createComment, updateComment } from "../actions";
+import Loading from "@/app/_components/Loading";
+import CommentPreview from "@/app/_components/CommentPreview";
+import CommentForm from "@/app/_components/CommentForm";
 
 type TUserCommentsProps = {
-  user: TUser;
+  userId: string;
+  comments: TComment[];
 };
 
-export default function UserComments({ user }: TUserCommentsProps) {
+export default function UserComments({ userId, comments }: TUserCommentsProps) {
   const router = useRouter();
   const { data: session, status } = useSession();
   const [value, setValue] = useState("");
@@ -61,7 +61,7 @@ export default function UserComments({ user }: TUserCommentsProps) {
     } else {
       await executeCreate({
         value: value,
-        userId: user.id,
+        userId,
         published: true,
         writerId: session?.user?.id,
         parentId: commentParent?.id,
@@ -120,7 +120,7 @@ export default function UserComments({ user }: TUserCommentsProps) {
           </Card>
         )
       )}
-      {user.comments?.map((comment) => (
+      {comments.map((comment) => (
         <UserComment
           key={comment.id}
           comment={comment}

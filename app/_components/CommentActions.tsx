@@ -12,7 +12,7 @@ import {
 } from "@heroui/dropdown";
 import { VariantProps } from "@heroui/theme";
 import { IoMdMore } from "react-icons/io";
-import { TCommand } from "@/types/command";
+import { TCommand } from "@/app/_types/command";
 
 type TCommentActionsProps = {
   replyCommand?: TCommand;

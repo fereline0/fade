@@ -1,11 +1,6 @@
-import { TComment } from "@/types/comment";
-import Comment from "../shared/Comment";
 import { Link } from "@heroui/link";
-import CommentActions from "../shared/CommentActions";
 import { formatDistance } from "date-fns";
-import CommentPreview from "../shared/CommentPreview";
 import { useServerAction } from "zsa-react";
-import { deleteComment } from "@/actions/comment";
 import { useRouter } from "next/navigation";
 import {
   Modal,
@@ -17,8 +12,13 @@ import {
 } from "@heroui/modal";
 import { Button } from "@heroui/button";
 import { useSession } from "next-auth/react";
-import { canDelete, canEdit } from "@/policies/comment";
 import { Dispatch, SetStateAction } from "react";
+import { TComment } from "@/app/_types/comment";
+import { deleteComment } from "../actions";
+import { can, findActiveBan } from "@/app/_utils/user";
+import Comment from "@/app/_components/Comment";
+import CommentPreview from "@/app/_components/CommentPreview";
+import CommentActions from "@/app/_components/CommentActions";
 
 type TUserCommentProps = {
   comment: TComment;
@@ -33,7 +33,7 @@ export default function UserComment({
   setCommentForEdit,
   setCommentParent,
 }: TUserCommentProps) {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { isPending, execute } = useServerAction(deleteComment);
@@ -55,15 +55,18 @@ export default function UserComment({
     router.refresh();
   };
 
-  const isUserLoggedIn = status === "authenticated";
-  const userId = session?.user?.id || "";
-  const userAbilities = session?.user?.role?.abilities || [];
+  const user = session?.user;
+  const userAbilities = user?.role?.abilities || [];
+  const userIsBanned = !!findActiveBan(user?.bans || []);
+  const userWriteThisComment = user?.id === comment.writerId;
 
-  const replyIsDisabled = !isUserLoggedIn;
+  const replyIsDisabled = userIsBanned;
   const editIsDisabled =
-    !isUserLoggedIn || !canEdit(userId, comment.writerId, userAbilities);
+    userIsBanned &&
+    !(userWriteThisComment || can(userAbilities, "editComment"));
   const deleteIsDisabled =
-    !isUserLoggedIn || !canDelete(userId, comment.writerId, userAbilities);
+    userIsBanned &&
+    !(userWriteThisComment || can(userAbilities, "deleteComment"));
 
   const isAnyActionDisabled =
     replyIsDisabled && editIsDisabled && deleteIsDisabled;

@@ -4,7 +4,6 @@ import React, { useTransition } from "react";
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@heroui/navbar";
 import { Link } from "@heroui/link";
 import { Button } from "@heroui/button";
-import Logo from "./Logo";
 import { Avatar } from "@heroui/avatar";
 import {
   Dropdown,
@@ -13,7 +12,6 @@ import {
   DropdownItem,
 } from "@heroui/dropdown";
 import { useSession } from "next-auth/react";
-import ThemeSwitcher from "../features/ThemeSwitcher";
 import {
   Modal,
   ModalBody,
@@ -24,8 +22,10 @@ import {
 } from "@heroui/modal";
 import { Form } from "@heroui/form";
 import { Spinner } from "@heroui/spinner";
-import { logOut } from "@/actions/auth";
 import { VariantProps } from "@heroui/theme";
+import { logOut } from "../(routes)/login/actions";
+import ThemeSwitcher from "./ThemeSwitcher";
+import Logo from "./Logo";
 
 export default function Header() {
   const { data: session, status } = useSession();

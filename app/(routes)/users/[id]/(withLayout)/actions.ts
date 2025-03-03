@@ -1,18 +1,19 @@
 "use server";
 
-import { createServerAction } from "zsa";
-import { prisma } from "@/utils/prisma";
 import {
   createCommentSchema,
   deleteCommentSchema,
   updateCommentSchema,
-} from "@/schemas/comment";
+} from "@/app/_schemas/comment";
+import { prisma } from "@/app/_utils/prisma";
 import {
+  canCreateCommentProcedure,
   canDeleteCommentProcedure,
   canUpdateCommentProcedure,
-} from "@/procedures/comment";
+} from "./procedures";
 
-export const createComment = createServerAction()
+export const createComment = canCreateCommentProcedure
+  .createServerAction()
   .input(createCommentSchema)
   .handler(async ({ input }) => {
     await prisma.comment.create({
