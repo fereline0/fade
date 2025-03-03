@@ -62,10 +62,10 @@ export default function UserComment({
 
   const replyIsDisabled = userIsBanned;
   const editIsDisabled =
-    userIsBanned &&
+    userIsBanned ||
     !(userWriteThisComment || can(userAbilities, "editComment"));
   const deleteIsDisabled =
-    userIsBanned &&
+    userIsBanned ||
     !(userWriteThisComment || can(userAbilities, "deleteComment"));
 
   const isAnyActionDisabled =

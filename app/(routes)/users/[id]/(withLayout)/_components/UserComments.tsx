@@ -12,6 +12,7 @@ import { createComment, updateComment } from "../actions";
 import Loading from "@/app/_components/Loading";
 import CommentPreview from "@/app/_components/CommentPreview";
 import CommentForm from "@/app/_components/CommentForm";
+import { findActiveBan } from "@/app/_utils/user";
 
 type TUserCommentsProps = {
   userId: string;
@@ -84,7 +85,7 @@ export default function UserComments({ userId, comments }: TUserCommentsProps) {
       {status === "loading" ? (
         <Loading />
       ) : (
-        status === "authenticated" && (
+        !findActiveBan(session?.user.bans || []) && (
           <Card>
             <CardBody>
               <div className="space-y-4">
