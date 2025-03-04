@@ -1,10 +1,8 @@
 import { prisma } from "@/app/_utils/prisma";
-import UserComments from "./_components/UserComments";
+import Bans from "./_components/Bans";
 import { notFound } from "next/navigation";
 
-export const revalidate = 0;
-
-type TCommentsPageProps = {
+type TBansPageProps = {
   params: Promise<{
     id: string;
   }>;
@@ -14,11 +12,12 @@ type TCommentsPageProps = {
   }>;
 };
 
-export default async function CommentsPage({
+export default async function BansPage({
   params,
   searchParams,
-}: TCommentsPageProps) {
+}: TBansPageProps) {
   const { id } = await params;
+
   const { page = "1", limit = "20" } = await searchParams;
 
   const parsedPage = Number(page);
@@ -26,37 +25,25 @@ export default async function CommentsPage({
   const pageToSkip = (parsedPage - 1) * parsedLimit;
 
   try {
-    const [comments, count] = await prisma.$transaction([
-      prisma.comment.findMany({
+    const [bans, count] = await prisma.$transaction([
+      prisma.ban.findMany({
         where: {
           userId: id,
         },
         skip: pageToSkip,
         take: parsedLimit,
         include: {
-          writer: true,
-          parent: {
-            include: {
-              writer: true,
-            },
-          },
+          initiator: true,
         },
       }),
-      prisma.comment.count({
+      prisma.ban.count({
         where: {
           userId: id,
         },
       }),
     ]);
 
-    return (
-      <UserComments
-        userId={id}
-        comments={comments}
-        total={count}
-        limit={parsedLimit}
-      />
-    );
+    return <Bans bans={bans} total={count} limit={parsedLimit} />;
   } catch (error) {
     notFound();
   }

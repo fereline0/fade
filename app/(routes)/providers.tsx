@@ -9,10 +9,10 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { SessionProvider } from "next-auth/react";
 import { ToastProvider } from "@heroui/toast";
 
-export interface ProvidersProps {
+type TProvidersProps = {
   children: React.ReactNode;
   themeProps?: ThemeProviderProps;
-}
+};
 
 declare module "@react-types/shared" {
   interface RouterConfig {
@@ -22,7 +22,7 @@ declare module "@react-types/shared" {
   }
 }
 
-export function Providers({ children, themeProps }: ProvidersProps) {
+export function Providers({ children, themeProps }: TProvidersProps) {
   const router = useRouter();
 
   return (

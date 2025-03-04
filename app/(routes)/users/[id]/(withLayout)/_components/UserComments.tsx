@@ -13,13 +13,20 @@ import Loading from "@/app/_components/Loading";
 import CommentPreview from "@/app/_components/CommentPreview";
 import CommentForm from "@/app/_components/CommentForm";
 import { findActiveBan } from "@/app/_utils/user";
+import Paginate from "@/app/_components/Paginate";
+import { TPaginate } from "@/app/_types/paginate";
 
-type TUserCommentsProps = {
+type TUserCommentsProps = TPaginate & {
   userId: string;
   comments: TComment[];
 };
 
-export default function UserComments({ userId, comments }: TUserCommentsProps) {
+export default function UserComments({
+  userId,
+  comments,
+  total,
+  limit,
+}: TUserCommentsProps) {
   const router = useRouter();
   const { data: session, status } = useSession();
   const [value, setValue] = useState("");
@@ -130,6 +137,7 @@ export default function UserComments({ userId, comments }: TUserCommentsProps) {
           setCommentParent={setCommentParent}
         />
       ))}
+      <Paginate total={total} limit={limit} />
     </div>
   );
 }

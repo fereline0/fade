@@ -4,9 +4,9 @@ import { prisma } from "@/app/_utils/prisma";
 import { notFound } from "next/navigation";
 
 type TUserLayoutProps = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
   children: ReactNode;
 };
 
@@ -14,21 +14,21 @@ export default async function UserLayout({
   params,
   children,
 }: TUserLayoutProps) {
-  const { id } = params;
+  const { id } = await params;
 
-  const user = await prisma.user.findUnique({
-    where: {
-      id,
-    },
-    include: {
-      role: true,
-      bans: true,
-    },
-  });
+  try {
+    const user = await prisma.user.findUniqueOrThrow({
+      where: {
+        id,
+      },
+      include: {
+        role: true,
+        bans: true,
+      },
+    });
 
-  if (!user) {
-    return notFound();
+    return <User user={user}>{children}</User>;
+  } catch (error) {
+    notFound();
   }
-
-  return <User user={user}>{children}</User>;
 }

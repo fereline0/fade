@@ -25,6 +25,13 @@ export default function User({ user, children }: TUserProps) {
       href: `/users/${user.id}`,
       as: Link,
     },
+    {
+      key: `/users/${user.id}/bans`,
+      id: `/users/${user.id}/bans`,
+      title: "Bans",
+      href: `/users/${user.id}/bans`,
+      as: Link,
+    },
   ];
 
   return (
