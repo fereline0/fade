@@ -10,6 +10,7 @@ const createCommentSchema = z.object({
 
 const canUpdateCommentProcedureSchema = z.object({
   writerId: z.string(),
+  writerRolePosition: z.number(),
 });
 
 const updateCommentSchema = z.object({
@@ -21,18 +22,18 @@ const updateCommentSchema = z.object({
   parentId: z.union([z.string(), z.null()]),
 });
 
-const canDeleteCommentProcedureSchema = z.object({
-  writerId: z.string(),
-});
-
 const deleteCommentSchema = z.object({
   id: z.string(),
+});
+const canDeleteCommentProcedureSchema = z.object({
+  writerId: z.string(),
+  writerRolePosition: z.number(),
 });
 
 export {
   createCommentSchema,
-  canUpdateCommentProcedureSchema,
   updateCommentSchema,
-  canDeleteCommentProcedureSchema,
+  canUpdateCommentProcedureSchema,
   deleteCommentSchema,
+  canDeleteCommentProcedureSchema,
 };

@@ -1,60 +1,101 @@
 import { createServerActionProcedure } from "zsa";
-import { authedProcedure } from "@/app/_procedures/auth";
+import { authedProcedure } from "@/app/procedures";
 import { canCreateBan, canDeleteBan, canUpdateBan } from "./policies";
+import {
+  canCreateBanProcedureSchema,
+  canDeleteBanProcedureSchema,
+  canUpdateBanProcedureSchema,
+} from "./schemas";
 
 export const canCreateBanProcedure = createServerActionProcedure(
   authedProcedure,
-).handler(
-  async ({
-    ctx: {
-      session,
-      session: { user },
-    },
-  }) => {
-    if (!canCreateBan(user.role?.abilities || [], user.bans || [])) {
-      throw new Error("UNAUTHORIZED");
-    }
+)
+  .input(canCreateBanProcedureSchema)
+  .handler(
+    async ({
+      input,
+      input: { userRolePosition },
+      ctx: {
+        session,
+        session: { user },
+      },
+    }) => {
+      if (
+        !canCreateBan(
+          userRolePosition,
+          user.role?.position || -Infinity,
+          user.role?.abilities || [],
+          user.bans || [],
+        )
+      ) {
+        throw new Error("UNAUTHORIZED");
+      }
 
-    return {
-      session,
-    };
-  },
-);
+      return {
+        input,
+        session,
+      };
+    },
+  );
 
 export const canUpdateBanProcedure = createServerActionProcedure(
   authedProcedure,
-).handler(
-  async ({
-    ctx: {
-      session,
-      session: { user },
-    },
-  }) => {
-    if (!canUpdateBan(user.role?.abilities || [], user.bans || [])) {
-      throw new Error("UNAUTHORIZED");
-    }
+)
+  .input(canUpdateBanProcedureSchema)
+  .handler(
+    async ({
+      input,
+      input: { userRolePosition },
+      ctx: {
+        session,
+        session: { user },
+      },
+    }) => {
+      if (
+        !canUpdateBan(
+          userRolePosition,
+          user.role?.position || -Infinity,
+          user.role?.abilities || [],
+          user.bans || [],
+        )
+      ) {
+        throw new Error("UNAUTHORIZED");
+      }
 
-    return {
-      session,
-    };
-  },
-);
+      return {
+        input,
+        session,
+      };
+    },
+  );
 
 export const canDeleteBanProcedure = createServerActionProcedure(
   authedProcedure,
-).handler(
-  async ({
-    ctx: {
-      session,
-      session: { user },
-    },
-  }) => {
-    if (!canDeleteBan(user.role?.abilities || [], user.bans || [])) {
-      throw new Error("UNAUTHORIZED");
-    }
+)
+  .input(canDeleteBanProcedureSchema)
+  .handler(
+    async ({
+      input,
+      input: { userRolePosition },
+      ctx: {
+        session,
+        session: { user },
+      },
+    }) => {
+      if (
+        !canDeleteBan(
+          userRolePosition,
+          user.role?.position || -Infinity,
+          user.role?.abilities || [],
+          user.bans || [],
+        )
+      ) {
+        throw new Error("UNAUTHORIZED");
+      }
 
-    return {
-      session,
-    };
-  },
-);
+      return {
+        input,
+        session,
+      };
+    },
+  );

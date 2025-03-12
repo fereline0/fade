@@ -8,6 +8,10 @@ const createBanSchema = z.object({
   initiatorId: z.string(),
 });
 
+const canCreateBanProcedureSchema = z.object({
+  userRolePosition: z.number(),
+});
+
 const updateBanSchema = z.object({
   id: z.string(),
   userId: z.string().optional(),
@@ -17,8 +21,23 @@ const updateBanSchema = z.object({
   initiatorId: z.string().optional(),
 });
 
+const canUpdateBanProcedureSchema = z.object({
+  userRolePosition: z.number(),
+});
+
 const deleteBanSchema = z.object({
   id: z.string(),
 });
 
-export { updateBanSchema, deleteBanSchema, createBanSchema };
+const canDeleteBanProcedureSchema = z.object({
+  userRolePosition: z.number(),
+});
+
+export {
+  createBanSchema,
+  canCreateBanProcedureSchema,
+  updateBanSchema,
+  canUpdateBanProcedureSchema,
+  deleteBanSchema,
+  canDeleteBanProcedureSchema,
+};

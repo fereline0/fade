@@ -21,10 +21,15 @@ import { canDeleteBan, canUpdateBan } from "../policies";
 
 type TBanActionsProps = {
   ban: TBan;
+  userRolePosition: number;
   setBanForEdit: Dispatch<SetStateAction<TBan | null>>;
 };
 
-export default function BanActions({ ban, setBanForEdit }: TBanActionsProps) {
+export default function BanActions({
+  ban,
+  userRolePosition,
+  setBanForEdit,
+}: TBanActionsProps) {
   const router = useRouter();
   const { data: session } = useSession();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -36,19 +41,32 @@ export default function BanActions({ ban, setBanForEdit }: TBanActionsProps) {
   };
 
   const onDelete = async () => {
-    await execute({ id: ban.id });
+    await execute({ id: ban.id, userRolePosition });
     router.refresh();
   };
 
   const authedUser = session?.user;
+  const authedUserRolePosition = authedUser?.role?.position || -Infinity;
   const authedUserAbilities = authedUser?.role?.abilities || [];
   const authedUserBans = authedUser?.bans || [];
 
   const updateIsDisabled =
-    !authedUser || !canUpdateBan(authedUserAbilities, authedUserBans);
+    !authedUser ||
+    !canUpdateBan(
+      userRolePosition,
+      authedUserRolePosition,
+      authedUserAbilities,
+      authedUserBans,
+    );
 
   const deleteIsDisabled =
-    !authedUser || !canDeleteBan(authedUserAbilities, authedUserBans);
+    !authedUser ||
+    !canDeleteBan(
+      userRolePosition,
+      authedUserRolePosition,
+      authedUserAbilities,
+      authedUserBans,
+    );
 
   const actions: VariantProps<typeof DropdownItem>[] = [
     {

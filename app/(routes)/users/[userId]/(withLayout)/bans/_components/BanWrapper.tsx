@@ -6,10 +6,15 @@ import { Dispatch, SetStateAction } from "react";
 
 type TBanWrapperProps = {
   ban: TBan;
+  userRolePosition: number;
   setBanForEdit: Dispatch<SetStateAction<TBan | null>>;
 };
 
-export default function BanWrapper({ ban, setBanForEdit }: TBanWrapperProps) {
+export default function BanWrapper({
+  ban,
+  userRolePosition,
+  setBanForEdit,
+}: TBanWrapperProps) {
   return (
     <Ban
       key={ban.id}
@@ -24,7 +29,13 @@ export default function BanWrapper({ ban, setBanForEdit }: TBanWrapperProps) {
       expires={ban.expires}
       formattedExpires={ban.formattedExpires || ""}
       activity={ban.activity}
-      endHeaderContent={<BanActions ban={ban} setBanForEdit={setBanForEdit} />}
+      endHeaderContent={
+        <BanActions
+          ban={ban}
+          userRolePosition={userRolePosition}
+          setBanForEdit={setBanForEdit}
+        />
+      }
     />
   );
 }

@@ -6,18 +6,26 @@ export const canCreateComment = (bans: TBan[]) => !findActiveBan(bans);
 
 export const canUpdateComment = (
   writerId: string,
+  writerRolePosition: number,
   authedUserId: string,
+  authedUserRolePosition: number,
   authedUserAbilities: TAbility[],
   authedUserBans: TBan[],
 ) =>
   !findActiveBan(authedUserBans) &&
-  (writerId === authedUserId || can(authedUserAbilities, "updateComment"));
+  (writerId === authedUserId ||
+    (can(authedUserAbilities, "updateComment") &&
+      writerRolePosition < authedUserRolePosition));
 
 export const canDeleteComment = (
   writerId: string,
+  writerRolePosition: number,
   authedUserId: string,
+  authedUserRolePosition: number,
   authedUserAbilities: TAbility[],
   authedUserBans: TBan[],
 ) =>
   !findActiveBan(authedUserBans) &&
-  (writerId === authedUserId || can(authedUserAbilities, "deleteComment"));
+  (writerId === authedUserId ||
+    (can(authedUserAbilities, "deleteComment") &&
+      writerRolePosition < authedUserRolePosition));

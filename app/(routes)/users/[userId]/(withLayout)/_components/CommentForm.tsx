@@ -64,6 +64,7 @@ export default function CommentForm({
         published: true,
         parentId: commentParent?.id ?? null,
         writerId: commentForEdit.writerId,
+        writerRolePosition: commentForEdit.writer?.role?.position || Infinity,
       });
     } else {
       await executeCreate({

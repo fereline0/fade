@@ -1,5 +1,5 @@
 import { createServerActionProcedure } from "zsa";
-import { authedProcedure } from "@/app/_procedures/auth";
+import { authedProcedure } from "@/app/procedures";
 import { canUpdateRole } from "./policies";
 import { canUpdateRolesProcedureSchema } from "./schemas";
 

@@ -19,6 +19,7 @@ import { Checkbox } from "@heroui/checkbox";
 
 type TBanFormProps = {
   userId: string;
+  userRolePosition: number;
   localTimeZone: string;
   banForEdit: TBan | null;
   setBanForEdit: Dispatch<SetStateAction<TBan | null>>;
@@ -26,6 +27,7 @@ type TBanFormProps = {
 
 export default function BanForm({
   userId,
+  userRolePosition,
   localTimeZone,
   banForEdit,
   setBanForEdit,
@@ -72,6 +74,7 @@ export default function BanForm({
     if (banForEdit) {
       await executeUpdate({
         id: banForEdit.id,
+        userRolePosition,
         reason: formattedReason,
         expires: expiresToIsoString,
         activity,
@@ -79,6 +82,7 @@ export default function BanForm({
     } else {
       await executeCreate({
         userId,
+        userRolePosition,
         reason: formattedReason,
         initiatorId: authedUser.id,
         expires: expiresToIsoString,
@@ -154,7 +158,12 @@ export default function BanForm({
               isLoading={isCreatePending || isUpdatePending}
               isDisabled={
                 !authedUser ||
-                !canCreateBan(authedUserAbilities, authedUserBans)
+                !canCreateBan(
+                  userRolePosition,
+                  authedUser?.role?.position || -Infinity,
+                  authedUserAbilities,
+                  authedUserBans,
+                )
               }
             >
               {banForEdit ? (

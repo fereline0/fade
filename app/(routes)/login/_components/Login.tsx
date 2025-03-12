@@ -2,7 +2,7 @@
 
 import { Card, CardBody } from "@heroui/card";
 import { Button } from "@heroui/button";
-import { FaGithub, FaYandex } from "react-icons/fa";
+import { FaGithub, FaYandexInternational } from "react-icons/fa";
 import { useTransition } from "react";
 import { login } from "../actions";
 
@@ -39,7 +39,7 @@ export default function Login() {
             isLoading={isPendingYandex}
             fullWidth
             className="bg-[#ff0000] text-white"
-            startContent={<FaYandex size={22} />}
+            startContent={<FaYandexInternational size={22} />}
             onPress={handleSignInWithYandex}
           >
             Yandex

@@ -1,5 +1,5 @@
 import { createServerActionProcedure } from "zsa";
-import { authedProcedure } from "@/app/_procedures/auth";
+import { authedProcedure } from "@/app/procedures";
 import {
   canDeleteCommentProcedureSchema,
   canUpdateCommentProcedureSchema,
@@ -36,6 +36,7 @@ export const canUpdateCommentProcedure = createServerActionProcedure(
   .handler(
     async ({
       input,
+      input: { writerId, writerRolePosition },
       ctx: {
         session,
         session: { user },
@@ -43,8 +44,10 @@ export const canUpdateCommentProcedure = createServerActionProcedure(
     }) => {
       if (
         !canUpdateComment(
-          input.writerId,
+          writerId,
+          writerRolePosition,
           user.id,
+          user.role?.position || -Infinity,
           user.role?.abilities || [],
           user.bans || [],
         )
@@ -53,6 +56,7 @@ export const canUpdateCommentProcedure = createServerActionProcedure(
       }
 
       return {
+        input,
         session,
       };
     },
@@ -65,6 +69,7 @@ export const canDeleteCommentProcedure = createServerActionProcedure(
   .handler(
     async ({
       input,
+      input: { writerId, writerRolePosition },
       ctx: {
         session,
         session: { user },
@@ -72,8 +77,10 @@ export const canDeleteCommentProcedure = createServerActionProcedure(
     }) => {
       if (
         !canDeleteComment(
-          input.writerId,
+          writerId,
+          writerRolePosition,
           user.id,
+          user.role?.position || -Infinity,
           user.role?.abilities || [],
           user.bans || [],
         )
@@ -82,6 +89,7 @@ export const canDeleteCommentProcedure = createServerActionProcedure(
       }
 
       return {
+        input,
         session,
       };
     },

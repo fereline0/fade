@@ -36,7 +36,11 @@ export default async function CommentsPage({
         skip: pageToSkip,
         take: parsedLimit,
         include: {
-          writer: true,
+          writer: {
+            include: {
+              role: true,
+            },
+          },
           parent: {
             include: {
               writer: true,

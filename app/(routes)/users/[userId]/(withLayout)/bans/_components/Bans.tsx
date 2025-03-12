@@ -9,12 +9,14 @@ import { useState } from "react";
 
 type TBansProps = TPaginate & {
   userId: string;
+  userRolePosition: number;
   localTimeZone: string;
   bans: TBan[];
 };
 
 export default function Bans({
   userId,
+  userRolePosition,
   localTimeZone,
   bans,
   total,
@@ -26,12 +28,18 @@ export default function Bans({
     <div className="space-y-4">
       <BanForm
         userId={userId}
+        userRolePosition={userRolePosition}
         localTimeZone={localTimeZone}
         banForEdit={banForEdit}
         setBanForEdit={setBanForEdit}
       />
       {bans.map((ban) => (
-        <BanWrapper key={ban.id} ban={ban} setBanForEdit={setBanForEdit} />
+        <BanWrapper
+          key={ban.id}
+          ban={ban}
+          userRolePosition={userRolePosition}
+          setBanForEdit={setBanForEdit}
+        />
       ))}
       <Paginate total={total} limit={limit} />
     </div>

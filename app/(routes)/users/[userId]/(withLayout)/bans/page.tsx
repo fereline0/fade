@@ -30,26 +30,29 @@ export default async function BansPage({
   const localTimeZone = getLocalTimeZone();
 
   try {
-    const [bans, count] = await prisma.$transaction([
-      prisma.ban.findMany({
-        where: {
-          userId,
+    const user = await prisma.user.findUniqueOrThrow({
+      where: {
+        id: userId,
+      },
+      select: {
+        role: true,
+        bans: {
+          skip: pageToSkip,
+          take: parsedLimit,
+          include: {
+            initiator: true,
+          },
         },
-        skip: pageToSkip,
-        take: parsedLimit,
-        include: {
-          initiator: true,
+        _count: {
+          select: {
+            bans: true,
+          },
         },
-      }),
-      prisma.ban.count({
-        where: {
-          userId,
-        },
-      }),
-    ]);
+      },
+    });
 
     const now = new Date();
-    const formattedBans: TBan[] = bans.map((ban) => ({
+    const formattedBans: TBan[] = user.bans.map((ban) => ({
       ...ban,
       formattedExpires: formatDistance(ban.expires, now, {
         addSuffix: true,
@@ -59,9 +62,10 @@ export default async function BansPage({
     return (
       <Bans
         userId={userId}
+        userRolePosition={user.role?.position || Infinity}
         localTimeZone={localTimeZone}
         bans={formattedBans}
-        total={count}
+        total={user._count.bans}
         limit={parsedLimit}
       />
     );

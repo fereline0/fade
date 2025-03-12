@@ -43,42 +43,46 @@ export default function CommentActions({
   const router = useRouter();
   const { isPending, execute } = useServerAction(deleteComment);
 
+  const writerId = comment.writerId;
+  const writerRolePosition = comment.writer?.role?.position || Infinity;
+  const authedUser = session?.user;
+  const authedUserId = authedUser?.id || "";
+  const authedUserRolePosition = authedUser?.role?.position || -Infinity;
+  const authedUserAbilities = authedUser?.role?.abilities || [];
+  const authedUserBans = authedUser?.bans || [];
+
   const onReply = () => {
     setCommentParent(comment);
   };
 
   const onUpdate = () => {
-    const { parent } = comment;
-
-    parent && setCommentParent(parent);
+    setCommentParent(comment.parent || null);
     setCommentForEdit(comment);
   };
 
   const onDelete = async () => {
-    await execute({ id: comment.id, writerId: comment.writerId });
+    await execute({ id: comment.id, writerId, writerRolePosition });
     router.refresh();
   };
-
-  const authedUser = session?.user;
-  const authedUserId = authedUser?.id || "";
-  const authedUserAbilities = authedUser?.role?.abilities || [];
-  const authedUserBans = authedUser?.bans || [];
-  const commentWriterId = comment.writerId;
 
   const replyIsDisabled = !authedUser || !canCreateComment(authedUserBans);
   const updateIsDisabled =
     !authedUser ||
     !canUpdateComment(
-      commentWriterId,
+      writerId,
+      writerRolePosition,
       authedUserId,
+      authedUserRolePosition,
       authedUserAbilities,
       authedUserBans,
     );
   const deleteIsDisabled =
     !authedUser ||
     !canDeleteComment(
-      commentWriterId,
+      writerId,
+      writerRolePosition,
       authedUserId,
+      authedUserRolePosition,
       authedUserAbilities,
       authedUserBans,
     );
