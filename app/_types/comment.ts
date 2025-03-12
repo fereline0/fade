@@ -13,4 +13,6 @@ export type TComment = {
   user?: TUser | null;
   createdAt: Date;
   updatedAt: Date;
+  formattedCreatedAt?: string;
+  formattedUpdatedAt?: string;
 };

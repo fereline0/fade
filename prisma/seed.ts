@@ -3,11 +3,16 @@ const prisma = new PrismaClient();
 
 async function main() {
   const abilities = [
-    { slug: "editUser" },
+    { slug: "updateUser" },
     { slug: "deleteUser" },
     { slug: "createBan" },
-    { slug: "editComment" },
+    { slug: "updateBan" },
+    { slug: "deleteBan" },
+    { slug: "updateComment" },
     { slug: "deleteComment" },
+    { slug: "createRole" },
+    { slug: "updateRole" },
+    { slug: "deleteRole" },
   ];
 
   await prisma.ability.createMany({
@@ -50,10 +55,15 @@ async function main() {
       position: 3,
       abilities: {
         connect: [
-          { slug: "editUser" },
+          { slug: "updateUser" },
           { slug: "createBan" },
-          { slug: "editComment" },
+          { slug: "updateBan" },
+          { slug: "deleteBan" },
+          { slug: "updateComment" },
           { slug: "deleteComment" },
+          { slug: "createRole" },
+          { slug: "updateRole" },
+          { slug: "deleteRole" },
         ],
       },
     },

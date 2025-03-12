@@ -7,4 +7,6 @@ export type TRole = {
   abilities?: TAbility[] | null;
   createdAt: Date;
   updatedAt: Date;
+  formattedCreatedAt?: string;
+  formattedUpdatedAt?: string;
 };

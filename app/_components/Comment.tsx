@@ -4,7 +4,7 @@ import { User } from "@heroui/user";
 import { ReactNode } from "react";
 
 type TCommentProps = {
-  value: string;
+  value: ReactNode;
   name: ReactNode;
   description?: ReactNode;
   avatarProps?: Partial<AvatarProps> | undefined;

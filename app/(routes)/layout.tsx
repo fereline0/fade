@@ -2,7 +2,10 @@ import "@/app/_styles/globals.css";
 import { Metadata, Viewport } from "next";
 import { siteConfig } from "@/app/_config/site";
 import { ReactNode } from "react";
-import Root from "@/app/_components/Root";
+import { Providers } from "./providers";
+import Header from "../_components/Header";
+import { fontSans } from "../_config/fonts";
+import clsx from "clsx";
 
 export const metadata: Metadata = {
   title: {
@@ -27,5 +30,24 @@ type TRootLayoutProps = {
 };
 
 export default function RootLayout({ children }: TRootLayoutProps) {
-  return <Root>{children}</Root>;
+  return (
+    <html suppressHydrationWarning lang="en">
+      <head />
+      <body
+        className={clsx(
+          "min-h-screen bg-background font-sans antialiased",
+          fontSans.variable,
+        )}
+      >
+        <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
+          <div className="space-y-6">
+            <Header />
+            <main className="mx-auto w-full max-w-[1024px] px-6 py-4 break-all">
+              {children}
+            </main>
+          </div>
+        </Providers>
+      </body>
+    </html>
+  );
 }

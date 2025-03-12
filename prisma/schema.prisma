@@ -29,7 +29,7 @@ model User {
 model Role {
   id        String    @id @default(cuid())
   name      String    @unique
-  position  Int       @unique
+  position  Int
   users     User[]
   abilities Ability[]
 
@@ -50,7 +50,7 @@ model Ban {
   id          String   @id @default(cuid())
   user        User     @relation("user", fields: [userId], references: [id], onDelete: Cascade)
   userId      String
-  reason      String
+  reason      String?
   activity    Boolean  @default(true)
   expires     DateTime
   initiator   User     @relation("initiator", fields: [initiatorId], references: [id], onDelete: Cascade)

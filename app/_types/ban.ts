@@ -7,8 +7,11 @@ export type TBan = {
   reason: string | null;
   activity: boolean;
   expires: Date;
+  formattedExpires?: string;
   initiatorId: string;
   initiator?: TUser | null;
   createdAt: Date;
   updatedAt: Date;
+  formattedCreatedAt?: string;
+  formattedUpdatedAt?: string;
 };

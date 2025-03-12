@@ -3,4 +3,6 @@ export type TAbility = {
   slug: string;
   createdAt: Date;
   updatedAt: Date;
+  formattedCreatedAt?: string;
+  formattedUpdatedAt?: string;
 };

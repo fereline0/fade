@@ -3,12 +3,24 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { Pagination } from "@heroui/pagination";
 import { TPaginate } from "../_types/paginate";
+import { VariantProps } from "@heroui/theme";
 
-export default function Paginate(props: TPaginate) {
+type TPaginateProps = TPaginate & {
+  paginationProps?: Omit<
+    VariantProps<typeof Pagination>,
+    "initialPage" | "total" | "onChange"
+  >;
+};
+
+export default function Paginate({
+  total,
+  limit,
+  paginationProps = { showShadow: true },
+}: TPaginateProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const totalPageCount = Math.ceil(props.total / props.limit);
+  const totalPageCount = Math.ceil(total / limit);
   const point = Number(searchParams.get("page")) || 1;
 
   const createPageURL = (pageNumber: string) => {
@@ -20,11 +32,11 @@ export default function Paginate(props: TPaginate) {
   return (
     <Pagination
       initialPage={point}
-      showShadow
       total={totalPageCount}
       onChange={(page: number) =>
         router.push(`?${createPageURL(page.toString())}`)
       }
+      {...paginationProps}
     />
   );
 }

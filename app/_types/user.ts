@@ -15,4 +15,6 @@ export type TUser = {
   bans?: TBan[] | null;
   createdAt: Date;
   updatedAt: Date;
+  formattedCreatedAt?: string;
+  formattedUpdatedAt?: string;
 };
