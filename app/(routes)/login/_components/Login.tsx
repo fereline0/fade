@@ -23,7 +23,7 @@ export default function Login() {
   };
 
   return (
-    <Card className="mx-auto space-y-4 max-w-full w-full sm:max-w-80">
+    <Card className="mx-auto max-w-full w-full sm:max-w-80">
       <CardBody>
         <div className="space-y-2">
           <Button

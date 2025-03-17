@@ -22,48 +22,35 @@ async function main() {
 
   await prisma.role.upsert({
     where: {
-      name: "User",
+      name: "Admin",
     },
     update: {},
     create: {
-      name: "User",
-      position: 1,
-    },
-  });
-
-  await prisma.role.upsert({
-    where: {
-      name: "Moderator",
-    },
-    update: {},
-    create: {
-      name: "Moderator",
-      position: 2,
+      name: "Admin",
+      position: 0,
+      color: "#ff0000",
       abilities: {
-        connect: [{ slug: "deleteComment" }],
+        connect: abilities,
       },
     },
   });
 
   await prisma.role.upsert({
     where: {
-      name: "Admin",
+      name: "Moderator",
     },
     update: {},
     create: {
-      name: "Admin",
-      position: 3,
+      name: "Moderator",
+      position: 1,
+      color: "#028a00",
       abilities: {
         connect: [
-          { slug: "updateUser" },
           { slug: "createBan" },
           { slug: "updateBan" },
           { slug: "deleteBan" },
           { slug: "updateComment" },
           { slug: "deleteComment" },
-          { slug: "createRole" },
-          { slug: "updateRole" },
-          { slug: "deleteRole" },
         ],
       },
     },
@@ -71,15 +58,13 @@ async function main() {
 
   await prisma.role.upsert({
     where: {
-      name: "Developer",
+      name: "User",
     },
     update: {},
     create: {
-      name: "Developer",
-      position: 4,
-      abilities: {
-        connect: abilities,
-      },
+      name: "User",
+      position: 2,
+      color: "#d1d1d1",
     },
   });
 }

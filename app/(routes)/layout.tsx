@@ -3,7 +3,7 @@ import { Metadata, Viewport } from "next";
 import { siteConfig } from "@/app/_config/site";
 import { ReactNode } from "react";
 import { Providers } from "./providers";
-import Header from "../_components/Header";
+import Header from "../_components/shared/Header";
 import { fontSans } from "../_config/fonts";
 import clsx from "clsx";
 

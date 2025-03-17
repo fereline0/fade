@@ -4,6 +4,7 @@ export type TRole = {
   id: string;
   name: string;
   position: number;
+  color: string;
   abilities?: TAbility[] | null;
   createdAt: Date;
   updatedAt: Date;
