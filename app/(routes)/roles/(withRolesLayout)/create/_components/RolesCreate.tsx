@@ -27,7 +27,10 @@ export default function RolesCreate({
   const { isPending, execute, isSuccess, error } = useServerAction(createRole);
 
   useEffect(() => {
-    isSuccess && router.replace("/roles");
+    if (isSuccess) {
+      router.replace("/roles");
+      router.refresh();
+    }
   }, [isSuccess]);
 
   return (
