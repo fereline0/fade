@@ -5,5 +5,5 @@ type TContainerSideBarProps = {
 };
 
 export default function ContainerSideBar({ children }: TContainerSideBarProps) {
-  return <div className="max-w-full w-full sm:max-w-64">{children}</div>;
+  return <div className="max-w-full w-full md:max-w-64">{children}</div>;
 }

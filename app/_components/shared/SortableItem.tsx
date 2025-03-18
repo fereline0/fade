@@ -1,6 +1,8 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import clsx from "clsx";
 import { ReactNode } from "react";
+import { MdDragIndicator } from "react-icons/md"; // Импортируем иконку для "язычка"
 
 type SortableItemProps = {
   id: string;
@@ -21,12 +23,20 @@ export function SortableItem({ id, children, disabled }: SortableItemProps) {
     <div
       ref={setNodeRef}
       style={style}
-      {...attributes}
-      {...listeners}
-      className={`
-        ${disabled ? "cursor-not-allowed opacity-50" : "cursor-grab"}
-      `}
+      className={clsx("flex items-center gap-4", [
+        disabled && "cursor-not-allowed opacity-50",
+      ])}
     >
+      {/* "Язычок" для перетаскивания */}
+      <div
+        {...attributes}
+        {...listeners}
+        className={`${disabled ? "cursor-not-allowed" : "cursor-grab"} p-1`}
+      >
+        <MdDragIndicator size={20} /> {/* Иконка для перетаскивания */}
+      </div>
+
+      {/* Дочерние элементы */}
       {children}
     </div>
   );

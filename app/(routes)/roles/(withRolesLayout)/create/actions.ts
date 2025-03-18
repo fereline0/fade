@@ -17,7 +17,7 @@ export const createRole = createServerAction()
       await tx.role.create({
         data: {
           name,
-          position: maxPositionRole.position + 1,
+          position: ++maxPositionRole.position,
           color,
           abilities: {
             connect: abilities,

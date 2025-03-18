@@ -15,7 +15,7 @@ import {
   verticalListSortingStrategy,
   arrayMove,
 } from "@dnd-kit/sortable";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useIsSSR } from "@react-aria/ssr";
 import Loading from "@/app/_components/shared/Loading";
 import { useSession } from "next-auth/react";
@@ -27,7 +27,7 @@ import { GoPlus } from "react-icons/go";
 import { Link } from "@heroui/link";
 import { Alert } from "@heroui/alert";
 import { updateRolesPositions } from "../actions";
-import { canCreateRole, canUpdateRolesPositions } from "../policies";
+import { canCreateRole, canUpdateRole, canUpdateRoles } from "../policies";
 import Container from "@/app/_components/shared/Container";
 import ContainerSideBar from "@/app/_components/shared/ContainerSideBar";
 import ContainerMain from "@/app/_components/shared/ContainerMain";
@@ -52,6 +52,11 @@ export default function Roles({ roles, children }: TRolesProps) {
 
   const { isPending, execute } = useServerAction(updateRolesPositions);
 
+  useEffect(() => {
+    console.log(roles);
+    roles && setLocalRoles(roles);
+  }, [roles]);
+
   const findChangedRoles = (arr1: TRole[], arr2: TRole[]): TRole[] => {
     return arr1.filter((item1) => {
       const item2 = arr2.find((item) => item.id === item1.id);
@@ -62,7 +67,7 @@ export default function Roles({ roles, children }: TRolesProps) {
   };
 
   const checkIsDisabled = (rolePosition: number) =>
-    !canUpdateRolesPositions(
+    !canUpdateRole(
       authedUserBans,
       authedUserRoleAbilities,
       authedUserRole?.position!,
@@ -118,8 +123,11 @@ export default function Roles({ roles, children }: TRolesProps) {
     router.refresh();
   };
 
-  const isDisabled = changedRoles.some((changedRole) =>
-    checkIsDisabled(changedRole.position),
+  const isDisabled = !canUpdateRoles(
+    authedUserBans,
+    authedUserRoleAbilities,
+    authedUserRole?.position!,
+    changedRoles,
   );
 
   return (
