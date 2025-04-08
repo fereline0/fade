@@ -15,7 +15,7 @@ export default function Role({
   ...cardProps
 }: TRoleProps) {
   return (
-    <Card {...cardProps}>
+    <Card fullWidth {...cardProps}>
       <CardBody>
         <div className="flex gap-4 justify-between">
           <div className="flex gap-2 items-center">

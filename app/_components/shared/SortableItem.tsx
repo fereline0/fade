@@ -27,17 +27,14 @@ export function SortableItem({ id, children, disabled }: SortableItemProps) {
         disabled && "cursor-not-allowed opacity-50",
       ])}
     >
-      {/* "Язычок" для перетаскивания */}
+      {children}
       <div
         {...attributes}
         {...listeners}
         className={`${disabled ? "cursor-not-allowed" : "cursor-grab"} p-1`}
       >
-        <MdDragIndicator size={20} /> {/* Иконка для перетаскивания */}
+        <MdDragIndicator size={20} />
       </div>
-
-      {/* Дочерние элементы */}
-      {children}
     </div>
   );
 }

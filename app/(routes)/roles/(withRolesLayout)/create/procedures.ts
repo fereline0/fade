@@ -1,38 +1,24 @@
 import { createServerActionProcedure } from "zsa";
 import { authedProcedure } from "@/app/procedures";
-import { canUpdateRolesPositions } from "./policies";
-import { canUpdateRolesPositionsProcedureSchema } from "../schemas";
+import { canCreateRole } from "../policies";
 
-export const canUpdateRolesPositionsProcedure = createServerActionProcedure(
+export const canCreateRoleProcedure = createServerActionProcedure(
   authedProcedure,
-)
-  .input(canUpdateRolesPositionsProcedureSchema)
-  .handler(
-    async ({
-      input,
-      ctx: {
-        session,
-        session: { user },
-      },
-    }) => {
-      const authedUserRole = user.role;
-
-      input.roles.forEach((role) => {
-        if (
-          !canUpdateRolesPositions(
-            authedUserRole?.abilities || [],
-            user.bans || [],
-            authedUserRole?.position!,
-            role.position,
-          )
-        ) {
-          throw new Error("UNAUTHORIZED");
-        }
-      });
-
-      return {
-        input,
-        session,
-      };
+).handler(
+  async ({
+    ctx: {
+      session,
+      session: { user },
     },
-  );
+  }) => {
+    const authedUserRole = user.role;
+
+    if (!canCreateRole(user.bans || [], authedUserRole?.abilities || [])) {
+      throw new Error("UNAUTHORIZED");
+    }
+
+    return {
+      session,
+    };
+  },
+);

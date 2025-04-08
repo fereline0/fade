@@ -1,12 +1,12 @@
 import { createServerActionProcedure } from "zsa";
 import { authedProcedure } from "@/app/procedures";
-import { canUpdateRoles } from "./policies";
-import { canUpdateRolesProcedureSchema } from "./schemas";
+import { canUpdateRole } from "../../policies";
+import { canUpdateRoleProcedureSchema } from "./schemas";
 
-export const canUpdateRolesProcedure = createServerActionProcedure(
+export const canUpdateRoleProcedure = createServerActionProcedure(
   authedProcedure,
 )
-  .input(canUpdateRolesProcedureSchema)
+  .input(canUpdateRoleProcedureSchema)
   .handler(
     async ({
       input,
@@ -18,11 +18,11 @@ export const canUpdateRolesProcedure = createServerActionProcedure(
       const authedUserRole = user.role;
 
       if (
-        !canUpdateRoles(
+        !canUpdateRole(
           user.bans || [],
           authedUserRole?.abilities || [],
           authedUserRole?.position!,
-          input.roles,
+          input.position,
         )
       ) {
         throw new Error("UNAUTHORIZED");
