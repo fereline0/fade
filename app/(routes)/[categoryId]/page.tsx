@@ -1,20 +1,27 @@
-import { prisma } from "@/app/_utils/prisma";
 import { notFound } from "next/navigation";
-import Categories from "./_components/Categories";
-import { TArticle } from "@/app/_types/article";
+import Categories from "../_components/Categories";
 import { formatDistance } from "date-fns";
+import { TArticle } from "@/app/_types/article";
+import { prisma } from "@/app/_utils/prisma";
 
-type TCategoriesPageProps = {
+type TCategoryPageProps = {
+  params: Promise<{
+    categoryId: string;
+  }>;
   searchParams: Promise<{
     page?: string;
     limit?: string;
   }>;
 };
 
-export default async function CategoriesPage({
+export default async function CategoryPage({
+  params,
   searchParams,
-}: TCategoriesPageProps) {
-  const { page = "1", limit = "20" } = await searchParams;
+}: TCategoryPageProps) {
+  const [{ categoryId }, { page = 1, limit = 20 }] = await Promise.all([
+    params,
+    searchParams,
+  ]);
 
   const parsedPage = Number(page);
   const parsedLimit = Number(limit);
@@ -24,11 +31,12 @@ export default async function CategoriesPage({
     const [categories, articles, count] = await prisma.$transaction([
       prisma.category.findMany({
         where: {
-          parentId: null,
+          parentId: categoryId,
         },
       }),
       prisma.article.findMany({
         where: {
+          categoryId,
           published: true,
         },
         include: {
@@ -48,6 +56,7 @@ export default async function CategoriesPage({
       }),
       prisma.article.count({
         where: {
+          categoryId,
           published: true,
         },
       }),

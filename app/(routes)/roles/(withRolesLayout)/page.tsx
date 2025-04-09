@@ -1,3 +1,5 @@
-export default async function RolesPage() {
-  return <div></div>;
+import EmptyRoleViewer from "./_components/EmptyRoleViewer";
+
+export default function RolesPage() {
+  return <EmptyRoleViewer />;
 }

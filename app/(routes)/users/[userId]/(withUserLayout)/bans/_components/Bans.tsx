@@ -7,12 +7,12 @@ import BanWrapper from "./BanWrapper";
 import { useState } from "react";
 import BanFormWrapper from "./BanFormWrapper";
 
-type TBansProps = TPaginate & {
+type TBansProps = {
   userId: string;
   userRolePosition: number;
   localTimeZone: string;
   bans: TBan[];
-};
+} & TPaginate;
 
 export default function Bans({
   userId,

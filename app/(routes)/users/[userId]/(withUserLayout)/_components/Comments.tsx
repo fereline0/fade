@@ -7,10 +7,10 @@ import { TPaginate } from "@/app/_types/paginate";
 import CommentWrapper from "./CommentWrapper";
 import CommentFormWrapper from "./CommentFormWrapper";
 
-type TCommentsProps = TPaginate & {
+type TCommentsProps = {
   userId: string;
   comments: TComment[];
-};
+} & TPaginate;
 
 export default function Comments({
   userId,

@@ -5,12 +5,12 @@ import { Pagination } from "@heroui/pagination";
 import { TPaginate } from "../../_types/paginate";
 import { VariantProps } from "@heroui/theme";
 
-type TPaginateProps = TPaginate & {
+type TPaginateProps = {
   paginationProps?: Omit<
     VariantProps<typeof Pagination>,
     "initialPage" | "total" | "onChange"
   >;
-};
+} & TPaginate;
 
 export default function Paginate({
   total,

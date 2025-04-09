@@ -5,5 +5,9 @@ type TContainerProps = {
 };
 
 export default function Container({ children }: TContainerProps) {
-  return <div className="flex flex-col gap-4 md:flex-row">{children}</div>;
+  return (
+    <div className="flex justify-between flex-col gap-4 md:flex-row">
+      {children}
+    </div>
+  );
 }

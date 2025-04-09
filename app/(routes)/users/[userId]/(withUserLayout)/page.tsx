@@ -18,8 +18,10 @@ export default async function CommentsPage({
   params,
   searchParams,
 }: TCommentsPageProps) {
-  const { userId } = await params;
-  const { page = "1", limit = "20" } = await searchParams;
+  const [{ userId }, { page = 1, limit = 20 }] = await Promise.all([
+    params,
+    searchParams,
+  ]);
 
   const parsedPage = Number(page);
   const parsedLimit = Number(limit);
@@ -30,6 +32,7 @@ export default async function CommentsPage({
       prisma.comment.findMany({
         where: {
           userId,
+          published: true,
         },
         skip: pageToSkip,
         take: parsedLimit,
@@ -49,6 +52,7 @@ export default async function CommentsPage({
       prisma.comment.count({
         where: {
           userId,
+          published: true,
         },
       }),
     ]);
