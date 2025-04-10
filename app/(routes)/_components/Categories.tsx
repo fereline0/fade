@@ -1,13 +1,13 @@
 import Paginate from "@/app/_components/shared/Paginate";
 import { TArticle } from "@/app/_types/article";
 import { TPaginate } from "@/app/_types/paginate";
-import Container from "@/app/_components/shared/Container";
-import ContainerSideBar from "@/app/_components/shared/ContainerSideBar";
-import ContainerMain from "@/app/_components/shared/ContainerMain";
 import { TCategory } from "@/app/_types/category";
 import Category from "@/app/_components/shared/Category";
 import ArticlePreviewWrapper from "./ArticlePreviewWrapper";
 import { Link } from "@heroui/link";
+import ColumnRowContainer from "@/app/_components/shared/ColumnRowContainer";
+import ColumnRowContainerMain from "@/app/_components/shared/ColumnRowContainerMain";
+import ColumnRowContainerSideBar from "@/app/_components/shared/ColumnRowContainerSideBar";
 
 type TCategoriesProps = {
   categories: TCategory[];
@@ -21,9 +21,9 @@ export default function Categories({
   limit,
 }: TCategoriesProps) {
   return (
-    <Container>
+    <ColumnRowContainer>
       {categories.length > 0 && (
-        <ContainerSideBar>
+        <ColumnRowContainerSideBar>
           <div className="space-y-2">
             {categories.map((category) => (
               <Category
@@ -32,16 +32,16 @@ export default function Categories({
               />
             ))}
           </div>
-        </ContainerSideBar>
+        </ColumnRowContainerSideBar>
       )}
-      <ContainerMain>
+      <ColumnRowContainerMain>
         <div className="space-y-4">
           {articles.map((article) => (
             <ArticlePreviewWrapper key={article.id} article={article} />
           ))}
           <Paginate total={total} limit={limit} />
         </div>
-      </ContainerMain>
-    </Container>
+      </ColumnRowContainerMain>
+    </ColumnRowContainer>
   );
 }

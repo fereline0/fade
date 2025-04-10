@@ -1,10 +1,12 @@
 import { ReactNode } from "react";
 
-type TContainerProps = {
+type TColumnRowContainerProps = {
   children: ReactNode;
 };
 
-export default function Container({ children }: TContainerProps) {
+export default function ColumnRowContainer({
+  children,
+}: TColumnRowContainerProps) {
   return (
     <div className="flex justify-between flex-col gap-4 md:flex-row">
       {children}

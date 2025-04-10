@@ -2,7 +2,7 @@ import { Card, CardBody } from "@heroui/card";
 import { AvatarProps } from "@heroui/avatar";
 import { User } from "@heroui/user";
 import { ReactNode } from "react";
-import Container from "./Container";
+import ColumnRowContainer from "./ColumnRowContainer";
 
 type TArticlePreviewProps = {
   title: ReactNode;
@@ -22,7 +22,7 @@ export default function ArticlePreview({
   return (
     <Card>
       <CardBody>
-        <Container>
+        <ColumnRowContainer>
           <div>
             <h3 className="text-lg font-bold">{title}</h3>
             {description}
@@ -34,7 +34,7 @@ export default function ArticlePreview({
               avatarProps={responderAvatarProps}
             />
           </div>
-        </Container>
+        </ColumnRowContainer>
       </CardBody>
     </Card>
   );

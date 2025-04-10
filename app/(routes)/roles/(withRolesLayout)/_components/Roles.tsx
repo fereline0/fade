@@ -28,10 +28,10 @@ import { Link } from "@heroui/link";
 import { Alert } from "@heroui/alert";
 import { updateRolesPositions } from "../actions";
 import { canCreateRole, canUpdateRole, canUpdateRoles } from "../policies";
-import Container from "@/app/_components/shared/Container";
-import ContainerSideBar from "@/app/_components/shared/ContainerSideBar";
-import ContainerMain from "@/app/_components/shared/ContainerMain";
 import RoleWrapper from "./RoleWrapper";
+import ColumnRowContainer from "@/app/_components/shared/ColumnRowContainer";
+import ColumnRowContainerSideBar from "@/app/_components/shared/ColumnRowContainerSideBar";
+import ColumnRowContainerMain from "@/app/_components/shared/ColumnRowContainerMain";
 
 type TRolesProps = {
   roles: TRole[];
@@ -131,8 +131,8 @@ export default function Roles({ roles, children }: TRolesProps) {
   );
 
   return (
-    <Container>
-      <ContainerSideBar>
+    <ColumnRowContainer>
+      <ColumnRowContainerSideBar>
         <div className="space-y-4">
           {isSSR ? (
             <Loading />
@@ -182,8 +182,8 @@ export default function Roles({ roles, children }: TRolesProps) {
             onPress={onSubmit}
           />
         </div>
-      </ContainerSideBar>
-      <ContainerMain>{children}</ContainerMain>
-    </Container>
+      </ColumnRowContainerSideBar>
+      <ColumnRowContainerMain>{children}</ColumnRowContainerMain>
+    </ColumnRowContainer>
   );
 }
