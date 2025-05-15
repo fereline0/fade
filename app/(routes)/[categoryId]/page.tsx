@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import Categories from "../_components/Categories";
+import Categories from "../../_components/Categories";
 import { formatDistance } from "date-fns";
 import { TArticle } from "@/app/_types/article";
 import { prisma } from "@/app/_utils/prisma";

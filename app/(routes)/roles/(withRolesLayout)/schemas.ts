@@ -1,4 +1,4 @@
-import { roleSchema } from "@/app/schemas/roleSchema";
+import { roleSchema } from "@/app/_schemas/roleSchema";
 import { z } from "zod";
 
 export const canUpdateRolesProcedureSchema = z.object({

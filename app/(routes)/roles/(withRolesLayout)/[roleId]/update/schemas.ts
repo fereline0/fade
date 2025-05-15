@@ -1,4 +1,4 @@
-import { abilitySchema } from "@/app/schemas/abilitySchema";
+import { abilitySchema } from "@/app/_schemas/abilitySchema";
 import { z } from "zod";
 
 export const canUpdateRoleProcedureSchema = z.object({

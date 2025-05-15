@@ -19,9 +19,7 @@ export default async function BansPage({
   params,
   searchParams,
 }: TBansPageProps) {
-  const { userId } = await params;
-
-  const { page = "1", limit = "20" } = await searchParams;
+  const [{ userId }, { page = "1", limit = "20" }] = await Promise.all([params, searchParams]);
 
   const parsedPage = Number(page);
   const parsedLimit = Number(limit);
