@@ -1,11 +1,12 @@
 import "@/app/_styles/globals.css";
 import { Metadata, Viewport } from "next";
 import { siteConfig } from "@/app/_config/site";
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
 import { Providers } from "./providers";
 import Header from "../_components/shared/Header";
 import { fontSans } from "../_config/fonts";
 import clsx from "clsx";
+import Loading from "../_components/shared/Loading";
 
 export const metadata: Metadata = {
   title: {
@@ -43,7 +44,7 @@ export default function RootLayout({ children }: TRootLayoutProps) {
           <div className="space-y-6">
             <Header />
             <main className="mx-auto w-full max-w-[1024px] px-6 py-4 break-all">
-              {children}
+              <Suspense fallback={<Loading />}>{children}</Suspense>
             </main>
           </div>
         </Providers>
