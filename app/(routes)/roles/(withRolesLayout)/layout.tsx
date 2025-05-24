@@ -7,6 +7,8 @@ type TRolesLayoutProps = {
   children: ReactNode;
 };
 
+export const revalidate = 0;
+
 export default async function UserLayout({ children }: TRolesLayoutProps) {
   try {
     const roles = await prisma.role.findMany({

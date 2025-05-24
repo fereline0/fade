@@ -53,8 +53,7 @@ export default function Roles({ roles, children }: TRolesProps) {
   const { isPending, execute } = useServerAction(updateRolesPositions);
 
   useEffect(() => {
-    console.log(roles);
-    roles && setLocalRoles(roles);
+    setLocalRoles(roles);
   }, [roles]);
 
   const findChangedRoles = (arr1: TRole[], arr2: TRole[]): TRole[] => {
