@@ -48,6 +48,7 @@ export default function CommentActions({
   const authedUser = session?.user;
   const authedUserId = authedUser?.id || "";
   const authedUserRolePosition = authedUser?.role?.position!;
+  console.log(authedUserRolePosition);
   const authedUserRoleAbilities = authedUser?.role?.abilities || [];
   const authedUserBans = authedUser?.bans || [];
 

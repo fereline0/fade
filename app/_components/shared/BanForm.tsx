@@ -51,18 +51,21 @@ export default function BanForm({
       <Input
         name="reason"
         value={reason}
+        isDisabled={isDisabled}
         onValueChange={setReason}
         label="Reason"
       />
       <DatePicker
         name="expires"
         label="Expires"
+        isDisabled={isDisabled}
         granularity={expiresGranularity}
         value={expires}
         onChange={setExpires}
       />
       <Checkbox
         name="activity"
+        isDisabled={isDisabled}
         color="danger"
         isSelected={activity}
         onValueChange={setActivity}

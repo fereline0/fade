@@ -29,7 +29,7 @@ export const canUpdateComment = (
     return false;
   }
 
-  if (writerRolePosition >= authedUserRolePosition) {
+  if (writerRolePosition < authedUserRolePosition) {
     return false;
   }
 
@@ -56,7 +56,7 @@ export const canDeleteComment = (
     return false;
   }
 
-  if (writerRolePosition >= authedUserRolePosition) {
+  if (writerRolePosition < authedUserRolePosition) {
     return false;
   }
 
